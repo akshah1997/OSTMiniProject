@@ -1,8 +1,8 @@
 package com.akshay.ostminiproject;
 
-//import android.content.Intent;
-
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,17 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-//import android.support.annotation.NonNull;
-
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainNavigation extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    /*private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authStateListener;*/
-
+    private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +29,7 @@ public class MainNavigation extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*auth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         // this listener will be called when there is change in firebase user session
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -48,7 +45,7 @@ public class MainNavigation extends AppCompatActivity
             }
         };
 
-        auth.addAuthStateListener(authStateListener);*/
+        auth.addAuthStateListener(authStateListener);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -86,8 +83,7 @@ public class MainNavigation extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_signout) {
-            Toast.makeText(MainNavigation.this,"Sign Out selected",Toast.LENGTH_SHORT).show();
-            //auth.signOut();
+            auth.signOut();
             return true;
         }
 
