@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile"
+            android:title="@string/navprofile"
+            />
+        <item
+            android:id="@+id/nav_attendance"
+            android:title="@string/attendance" />
+
+    </group>
+
+    <item android:title="@string/navmore">
+        <menu>
+            <item
+                android:id="@+id/nav_abt_us"
+                android:title="@string/about_us" />
+        </menu>
+    </item>
+
+</menu>
