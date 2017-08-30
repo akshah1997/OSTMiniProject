@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.akshay.ostminiproject.Fragments.StudentProfileFragment;
 import com.akshay.ostminiproject.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -98,7 +99,7 @@ public class MainNavigation extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            Toast.makeText(MainNavigation.this,"Profile selected",Toast.LENGTH_SHORT).show();
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container,StudentProfileFragment.newInstance()).commit();
         } else if (id == R.id.nav_attendance) {
             Toast.makeText(MainNavigation.this,"Attendance selected",Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_abt_us) {
@@ -108,5 +109,25 @@ public class MainNavigation extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        auth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (authStateListener != null) {
+            auth.removeAuthStateListener(authStateListener);
+        }
     }
 }
