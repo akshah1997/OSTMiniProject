@@ -21,4 +21,10 @@
     <string name="profile_change_password">Change Password</string>
     <string name="profile_new_password">New Password</string>
     <string name="profile_confirm">Confirm!</string>
+    <string name="btn_forgot_password">Forgot your password?</string>
+    <string name="lbl_forgot_password">Forgot Password?</string>
+    <string name="lbl_forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="btn_reset_password">Reset Password</string>
+    <string name="btn_back"><![CDATA[<< Back]]></string>
+    <string name="logo">Logo</string>
 </resources>
