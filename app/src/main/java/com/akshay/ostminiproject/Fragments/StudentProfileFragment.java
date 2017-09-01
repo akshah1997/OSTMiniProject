@@ -39,8 +39,7 @@ public class StudentProfileFragment extends Fragment implements View.OnClickList
     }
 
     public static StudentProfileFragment newInstance() {
-        StudentProfileFragment fragment = new StudentProfileFragment();
-        return fragment;
+        return (new StudentProfileFragment());
     }
 
     @Override

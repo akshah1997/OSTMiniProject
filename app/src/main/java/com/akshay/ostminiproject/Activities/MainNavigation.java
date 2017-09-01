@@ -11,8 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.akshay.ostminiproject.Fragments.AboutUs;
+import com.akshay.ostminiproject.Fragments.Attendance;
 import com.akshay.ostminiproject.Fragments.StudentProfileFragment;
 import com.akshay.ostminiproject.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -99,11 +100,11 @@ public class MainNavigation extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            getFragmentManager().beginTransaction().replace(R.id.fragment_container,StudentProfileFragment.newInstance()).commit();
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, StudentProfileFragment.newInstance()).commit();
         } else if (id == R.id.nav_attendance) {
-            Toast.makeText(MainNavigation.this,"Attendance selected",Toast.LENGTH_SHORT).show();
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, Attendance.newInstance()).commit();
         } else if (id == R.id.nav_abt_us) {
-            Toast.makeText(MainNavigation.this,"About Us selected",Toast.LENGTH_SHORT).show();
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, AboutUs.newInstance()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
