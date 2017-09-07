@@ -27,7 +27,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="30dp"
             android:contentDescription="@string/logo"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/iconcp" />
 
         <EditText
             android:id="@+id/email"
