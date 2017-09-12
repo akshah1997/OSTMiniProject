@@ -1,4 +1,4 @@
-package com.akshay.ostminiproject.Activities;
+package com.akshay.ostminiproject.Activities.Login;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

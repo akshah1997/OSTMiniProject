@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.akshay.ostminiproject.Activities.LoginActivity;
+import com.akshay.ostminiproject.Activities.Login.LoginActivity;
 import com.akshay.ostminiproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -106,24 +106,30 @@ public class StudentProfileFragment extends Fragment implements View.OnClickList
                 if (newPassword.getText().toString().length() < 6) {
                     newPassword.setError(getString(R.string.minimum_password));
                 } else {
-                    FirebaseAuth.getInstance().getCurrentUser().updatePassword(newPassword.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getActivity(), "Password is updated! Sign in with new password!", Toast.LENGTH_SHORT).show();
-                                auth.signOut();
-                                progressBar.setVisibility(View.GONE);
-                            } else {
-                                Toast.makeText(getActivity(), "Failed to update password!", Toast.LENGTH_SHORT).show();
+                    try {
+                        FirebaseAuth.getInstance().getCurrentUser().updatePassword(newPassword.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getActivity(), "Password is updated! Sign in with new password!", Toast.LENGTH_SHORT).show();
+                                    auth.signOut();
+                                    progressBar.setVisibility(View.GONE);
+                                } else {
+                                    Toast.makeText(getActivity(), "Failed to update password!", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    catch(NullPointerException e) {
+                        Toast.makeText(getActivity(), "Unexpected error in changing the password!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             } else if (newPassword.getText().toString().trim().equals("")) {
                 newPassword.setError(getString(R.string.enter_password));
                 progressBar.setVisibility(View.GONE);
             }
-        } else { //onclick signout
+        } else {
+            //onclick signout
             auth.signOut();
         }
     }

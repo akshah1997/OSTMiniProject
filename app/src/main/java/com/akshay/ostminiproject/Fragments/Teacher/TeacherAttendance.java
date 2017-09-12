@@ -1,4 +1,4 @@
-package com.akshay.ostminiproject.Fragments;
+package com.akshay.ostminiproject.Fragments.Teacher;
 
 
 import android.app.Fragment;
@@ -12,19 +12,17 @@ import com.akshay.ostminiproject.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Attendance#newInstance} factory method to
- * create an instance of this fragment.
  */
-public class Attendance extends Fragment {
+public class TeacherAttendance extends Fragment {
 
     Context context; //always pass this context for activity intent
 
-    public Attendance() {
+    public TeacherAttendance() {
         // Required empty public constructor
     }
 
-    public static Attendance newInstance() {
-        return (new Attendance());
+    public static TeacherAttendance newInstance() {
+        return (new TeacherAttendance());
     }
 
     @Override
@@ -36,7 +34,7 @@ public class Attendance extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_attendance, container, false);
+        return inflater.inflate(R.layout.fragment_teacher_attendance, container, false);
     }
 
     @Override
@@ -44,4 +42,5 @@ public class Attendance extends Fragment {
         super.onAttach(context);
         this.context = context;
     }
+
 }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.akshay.ostminiproject.Activities.LoginActivity">
+    tools:context="com.akshay.ostminiproject.Activities.Login.LoginActivity">
 
     <ProgressBar
         android:id="@+id/progressBar"

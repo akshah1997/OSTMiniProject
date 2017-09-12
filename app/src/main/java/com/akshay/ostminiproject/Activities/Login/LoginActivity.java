@@ -1,4 +1,4 @@
-package com.akshay.ostminiproject.Activities;
+package com.akshay.ostminiproject.Activities.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.akshay.ostminiproject.Activities.Student.MainNavigation;
 import com.akshay.ostminiproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,7 +32,10 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser()!= null) {
+            // if student
             startActivity(new Intent(LoginActivity.this, MainNavigation.class));
+            // if teacher
+            //startActivity(new Intent(LoginActivity.this, TeacherNavigation.class)); // remember to import class
             finish();
         }
 
@@ -81,7 +85,10 @@ public class LoginActivity extends AppCompatActivity {
                             // error in login
                             Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                         } else {
+                            // if student
                             Intent intent = new Intent(LoginActivity.this, MainNavigation.class);
+                            // if teacher
+                            // Intent intent = new Intent(LoginActivity.this, TeacherNavigation.class); // remember to import class
                             startActivity(intent);
                             finish();
                         }

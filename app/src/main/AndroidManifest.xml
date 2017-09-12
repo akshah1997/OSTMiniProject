@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.MainActivity" />
-        <activity android:name=".Activities.LoginActivity">
+        <activity android:name=".Activities.Login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,10 +19,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.MainNavigation"
+            android:name=".Activities.Student.MainNavigation"
             android:label="@string/title_activity_main_navigation"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.ResetPasswordActivity" />
+        <activity android:name=".Activities.Login.ResetPasswordActivity" />
+        <activity
+            android:name=".Activities.Teacher.TeacherNavigation"
+            android:label="@string/title_activity_teacher_navigation"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

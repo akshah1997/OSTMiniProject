@@ -1,4 +1,4 @@
-package com.akshay.ostminiproject.Activities;
+package com.akshay.ostminiproject.Activities.Student;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.akshay.ostminiproject.Activities.Login.LoginActivity;
 import com.akshay.ostminiproject.Fragments.AboutUs;
-import com.akshay.ostminiproject.Fragments.Attendance;
+import com.akshay.ostminiproject.Fragments.Student.Attendance;
 import com.akshay.ostminiproject.Fragments.StudentProfileFragment;
 import com.akshay.ostminiproject.R;
 import com.google.firebase.auth.FirebaseAuth;
