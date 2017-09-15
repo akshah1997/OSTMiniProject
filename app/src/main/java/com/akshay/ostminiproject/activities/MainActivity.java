@@ -1,4 +1,4 @@
-package com.akshay.ostminiproject.Activities;
+package com.akshay.ostminiproject.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

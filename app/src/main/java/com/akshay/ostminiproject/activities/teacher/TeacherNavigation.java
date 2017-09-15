@@ -1,4 +1,4 @@
-package com.akshay.ostminiproject.Activities.Teacher;
+package com.akshay.ostminiproject.activities.teacher;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.akshay.ostminiproject.Activities.Login.LoginActivity;
-import com.akshay.ostminiproject.Fragments.AboutUs;
-import com.akshay.ostminiproject.Fragments.StudentProfileFragment;
-import com.akshay.ostminiproject.Fragments.Teacher.TeacherAttendance;
 import com.akshay.ostminiproject.R;
+import com.akshay.ostminiproject.activities.login.LoginActivity;
+import com.akshay.ostminiproject.fragments.AboutUs;
+import com.akshay.ostminiproject.fragments.StudentProfileFragment;
+import com.akshay.ostminiproject.fragments.teacher.Notification;
+import com.akshay.ostminiproject.fragments.teacher.TeacherAttendance;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -50,6 +51,12 @@ public class TeacherNavigation extends AppCompatActivity
         };
 
         auth.addAuthStateListener(authStateListener);
+
+        // check if this activity was created from notification
+        String message = getIntent().getStringExtra("message");
+        if (message != null) {
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, Notification.newInstance(message)).commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

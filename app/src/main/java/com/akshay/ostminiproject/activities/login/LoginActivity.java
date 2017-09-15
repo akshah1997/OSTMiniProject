@@ -1,4 +1,4 @@
-package com.akshay.ostminiproject.Activities.Login;
+package com.akshay.ostminiproject.activities.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +11,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.akshay.ostminiproject.Activities.Student.MainNavigation;
 import com.akshay.ostminiproject.R;
+import com.akshay.ostminiproject.activities.notificationmsg.app.Config;
+import com.akshay.ostminiproject.activities.student.MainNavigation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -85,10 +87,12 @@ public class LoginActivity extends AppCompatActivity {
                             // error in login
                             Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                         } else {
+                            // TODO: make necessary changes based on type of user
                             // if student
                             Intent intent = new Intent(LoginActivity.this, MainNavigation.class);
                             // if teacher
                             // Intent intent = new Intent(LoginActivity.this, TeacherNavigation.class); // remember to import class
+                            FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
                             startActivity(intent);
                             finish();
                         }

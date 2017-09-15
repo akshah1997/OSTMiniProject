@@ -1,4 +1,4 @@
-package com.akshay.ostminiproject.Fragments;
+package com.akshay.ostminiproject.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -13,8 +13,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.akshay.ostminiproject.Activities.Login.LoginActivity;
 import com.akshay.ostminiproject.R;
+import com.akshay.ostminiproject.activities.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;

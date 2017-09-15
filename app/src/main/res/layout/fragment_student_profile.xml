@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.akshay.ostminiproject.Fragments.StudentProfileFragment">
+    tools:context="com.akshay.ostminiproject.fragments.StudentProfileFragment"
+    android:background="@color/colorPrimary">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
+        android:layout_height="match_parent">
 
         <Button
             android:id="@+id/profile_btn_change_password"
