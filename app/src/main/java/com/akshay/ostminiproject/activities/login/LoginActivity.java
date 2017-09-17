@@ -34,8 +34,9 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser()!= null) {
-            // if student
+            // if student TODO: make necessary changes based on type of user
             startActivity(new Intent(LoginActivity.this, MainNavigation.class));
+            FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
             // if teacher
             //startActivity(new Intent(LoginActivity.this, TeacherNavigation.class)); // remember to import class
             finish();

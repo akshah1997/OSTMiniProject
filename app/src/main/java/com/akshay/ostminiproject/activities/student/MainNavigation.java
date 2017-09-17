@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.akshay.ostminiproject.R;
 import com.akshay.ostminiproject.activities.login.LoginActivity;
@@ -54,8 +55,9 @@ public class MainNavigation extends AppCompatActivity
 
         // check if this activity was created from notification
         String message = getIntent().getStringExtra("message");
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         if (message != null) {
-            getFragmentManager().beginTransaction().replace(R.id.fragment_container, Notification.newInstance(message)).commit();
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, Notification.newInstance()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -113,6 +115,8 @@ public class MainNavigation extends AppCompatActivity
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, Attendance.newInstance()).commit();
         } else if (id == R.id.nav_abt_us) {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, AboutUs.newInstance()).commit();
+        } else if (id == R.id.nav_notification) {
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, Notification.newInstance()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

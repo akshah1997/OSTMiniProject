@@ -107,12 +107,14 @@ public class TeacherNavigation extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile) {
+        if (id == R.id.teacher_nav_profile) {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, StudentProfileFragment.newInstance()).commit();
-        } else if (id == R.id.nav_attendance) {
+        } else if (id == R.id.teacher_nav_attendance) {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, TeacherAttendance.newInstance()).commit();
-        } else if (id == R.id.nav_abt_us) {
+        } else if (id == R.id.teacher_nav_abt_us) {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, AboutUs.newInstance()).commit();
+        } else if (id == R.id.teacher_nav_notification) {
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new Notification()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

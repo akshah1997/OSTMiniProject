@@ -68,7 +68,7 @@ public class StudentProfileFragment extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getActivity().setTitle("Profile");
+        getActivity().setTitle(getString(R.string.navprofile));
         View view = inflater.inflate(R.layout.fragment_student_profile, container, false);
 
         changePassword = (Button) view.findViewById(R.id.profile_btn_change_password);

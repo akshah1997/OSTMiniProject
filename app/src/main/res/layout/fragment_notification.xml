@@ -5,7 +5,7 @@
     tools:context="com.akshay.ostminiproject.fragments.student.Notification">
 
     <TextView
-        android:id="@+id/teacher_notif_message"
+        android:id="@+id/student_notif_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textColor="@color/colorPrimary"

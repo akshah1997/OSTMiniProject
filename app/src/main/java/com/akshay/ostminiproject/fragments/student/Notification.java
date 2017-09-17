@@ -34,42 +34,38 @@ public class Notification extends Fragment {
         // Required empty public constructor
     }
 
-    public static Notification newInstance(String message) {
+    public static Notification newInstance() {
         Notification fragment = new Notification();
-        Bundle args = new Bundle();
-        args.putString("message", message);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            message = getArguments().getString("message");
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("Notification");
+        getActivity().setTitle(getString(R.string.navnotification));
 
-        Toast.makeText(context, "Push Notification: " + message, Toast.LENGTH_SHORT).show();
-        textView.setText(message);
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+        textView = (TextView) view.findViewById(R.id.student_notif_message);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context onreceivecontext, Intent intent) {
                 if(intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    Bundle bundle = intent.getExtras();
+                    if (bundle.getString("message") != null) {
+                        message = bundle.getString("message");
+                    }
                     Toast.makeText(context, "Push Notification: " + message, Toast.LENGTH_SHORT).show();
                     textView.setText(message);
                 }
             }
         };
 
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        textView = (TextView) view.findViewById(R.id.student_notif_message);
         // Inflate the layout for this fragment
         return view;
     }
