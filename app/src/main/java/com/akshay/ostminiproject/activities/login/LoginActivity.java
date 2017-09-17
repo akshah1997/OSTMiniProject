@@ -34,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser()!= null) {
+            // TODO: get the user type based on uid and open the activity accordingly. Remember this is to be done at 2 places
+            String uid = auth.getCurrentUser().getUid();
             // if student TODO: make necessary changes based on type of user
             startActivity(new Intent(LoginActivity.this, MainNavigation.class));
             FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
@@ -60,12 +62,12 @@ public class LoginActivity extends AppCompatActivity {
                 final String password = inputPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.enter_email), Toast.LENGTH_SHORT).show();
+                    inputEmail.setError(getString(R.string.enter_email));
                     return;
                 }
 
                 if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.enter_password), Toast.LENGTH_SHORT).show();
+                    inputPassword.setError(getString(R.string.enter_password));
                     return;
                 }
 
@@ -82,18 +84,24 @@ public class LoginActivity extends AppCompatActivity {
                         /* If sign in fails, display a message to the user. If sign in succeeds
                            the auth state listener will be notified and logic to handle the
                            signed in user can be handled in the listener.*/
-                        progressBar.setVisibility(View.GONE);
 
                         if(!task.isSuccessful()){
                             // error in login
                             Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                         } else {
+                            // TODO: get the user type based on uid and open the activity accordingly
+                            String uid;
+                            if (auth.getCurrentUser() != null) {
+                                uid = auth.getCurrentUser().getUid();
+                            }
+
                             // TODO: make necessary changes based on type of user
                             // if student
                             Intent intent = new Intent(LoginActivity.this, MainNavigation.class);
                             // if teacher
                             // Intent intent = new Intent(LoginActivity.this, TeacherNavigation.class); // remember to import class
                             FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+                            progressBar.setVisibility(View.GONE);
                             startActivity(intent);
                             finish();
                         }
