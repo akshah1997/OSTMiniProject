@@ -33,73 +33,39 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.android.volley.Request.Method.POST;
-
 public class LoginActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword;
     private FirebaseAuth auth;
     private ProgressBar progressBar;
-    private Button btnLogin, resetPassword;
+    private RequestQueue requestQueue;
+
+    private final String[] fname = new String[1];
+    private final String[] lname = new String[1];
+    private final String[] enrollmentNo = new String[1];
+    private final String[] userType = new String[1];
+    private final String[] fireBaseUid = new String[1];
+
+    private final String SEND_URL="http://ostminiproject.000webhostapp.com/getUserType.php";
+    private String uid;
+
+    public static final String TAG = "UserReqTAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String SEND_URL="http://ostminiproject.000webhostapp.com/getUserType.php";
+
+        requestQueue = Volley.newRequestQueue(this);
 
         auth = FirebaseAuth.getInstance();
-        final String[] fname = new String[1];
-        final String[] lname = new String[1];
-        final String[] enrollmentNo = new String[1];
-        final String[] userType = new String[1];
-        final String[] fireBaseUid = new String[1];
 
         if(auth.getCurrentUser()!= null) {
             // TODO: get the user type based on uid and open the activity accordingly. Remember this is to be done at 2 places
-            final String uid = auth.getCurrentUser().getUid();
+            uid = auth.getCurrentUser().getUid();
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, SEND_URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    // Toast.makeText(MobileDetails.this, response, Toast.LENGTH_LONG).show();
+            StringRequest stringRequest = makeRequest();
+            stringRequest.setTag(TAG);
 
-                    try
-                    {
-                        JSONObject jsonRootObject = new JSONObject(response);
-                        JSONArray jsonArray = jsonRootObject.optJSONArray("data");
-                        JSONObject jsonObject= jsonArray.getJSONObject(0);
-                        fireBaseUid[0] =jsonObject.optString("firebaseuid").toString();
-                        enrollmentNo[0] =jsonObject.optString("enrollment_number").toString();
-                        fname[0] =jsonObject.optString("fname").toString();
-                        lname[0] =jsonObject.optString("lname").toString();
-                        userType[0] =jsonObject.optString("user_type").toString();
-
-                        Toast.makeText(LoginActivity.this,fname[0]+"\nUser Type: "+userType[0], Toast.LENGTH_LONG).show();
-
-
-
-
-                    }
-                    catch (Exception e)
-                    {
-                        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }
-            },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }){
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String,String> params = new HashMap<String,String>();
-                    params.put("username",uid);
-                    return params;
-                }
-            };
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(stringRequest);
 
 
@@ -116,8 +82,8 @@ public class LoginActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        btnLogin = (Button) findViewById(R.id.btn_login);
-        resetPassword = (Button) findViewById(R.id.btn_reset_password);
+        Button btnLogin = (Button) findViewById(R.id.btn_login);
+        Button resetPassword = (Button) findViewById(R.id.btn_reset_password);
 
         auth = FirebaseAuth.getInstance();
 
@@ -157,10 +123,15 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                         } else {
                             // TODO: get the user type based on uid and open the activity accordingly
-                            String uid;
+
                             if (auth.getCurrentUser() != null) {
                                 uid = auth.getCurrentUser().getUid();
                             }
+
+                            StringRequest stringRequest = makeRequest();
+                            stringRequest.setTag(TAG);
+
+                            requestQueue.add(stringRequest);
 
                             // TODO: make necessary changes based on type of user
                             // if student
@@ -183,5 +154,53 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (requestQueue != null) {
+            requestQueue.cancelAll(TAG);
+        }
+    }
+
+    StringRequest makeRequest() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SEND_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(LoginActivity.this, response, Toast.LENGTH_LONG).show();
+
+                try {
+                    JSONObject jsonRootObject = new JSONObject(response);
+                    JSONArray jsonArray = jsonRootObject.optJSONArray("data");
+                    JSONObject jsonObject= jsonArray.getJSONObject(0);
+                    fireBaseUid[0] =jsonObject.optString("firebaseuid");
+                    enrollmentNo[0] =jsonObject.optString("enrollment_number");
+                    fname[0] =jsonObject.optString("fname");
+                    lname[0] =jsonObject.optString("lname");
+                    userType[0] =jsonObject.optString("user_type");
+
+                    Toast.makeText(LoginActivity.this,fname[0]+"\nUser Type: "+userType[0], Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("username",uid);
+                return params;
+            }
+        };
+
+        return stringRequest;
     }
 }
