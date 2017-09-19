@@ -5,9 +5,10 @@ public class Config {
     // global topic to receive app wide push notifications
     //TODO: change TOPIC_GLOBAL based on Teacher or Student
     //if student
-    public static final String TOPIC_GLOBAL = "student";
+    //public static final String TOPIC_GLOBAL = "student";
     //if teacher
     // public static final String TOPIC_GLOBAL = "teacher";
+    public static String TOPIC_GLOBAL;
 
     // broadcast receiver intent filters
     public static final String REGISTRATION_COMPLETE = "registrationComplete";

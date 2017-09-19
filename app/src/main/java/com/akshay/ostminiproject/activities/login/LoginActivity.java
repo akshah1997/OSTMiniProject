@@ -1,10 +1,12 @@
 package com.akshay.ostminiproject.activities.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import com.akshay.ostminiproject.R;
 import com.akshay.ostminiproject.activities.notificationmsg.app.Config;
 import com.akshay.ostminiproject.activities.student.MainNavigation;
+import com.akshay.ostminiproject.activities.teacher.TeacherNavigation;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -46,8 +49,10 @@ public class LoginActivity extends AppCompatActivity {
     private final String[] userType = new String[1];
     private final String[] fireBaseUid = new String[1];
 
-    private final String SEND_URL="http://ostminiproject.000webhostapp.com/getUserType.php";
     private String uid;
+
+    public static final String USERDETAILSSHAREDPREF = "userDetailsSharedPref";
+    SharedPreferences userDetails;
 
     public static final String TAG = "UserReqTAG";
 
@@ -55,25 +60,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        auth = FirebaseAuth.getInstance();
         requestQueue = Volley.newRequestQueue(this);
 
-        auth = FirebaseAuth.getInstance();
-
         if(auth.getCurrentUser()!= null) {
-            // TODO: get the user type based on uid and open the activity accordingly. Remember this is to be done at 2 places
-            uid = auth.getCurrentUser().getUid();
-
-            StringRequest stringRequest = makeRequest();
-            stringRequest.setTag(TAG);
-
-            requestQueue.add(stringRequest);
-
-
-            // if student TODO: make necessary changes based on type of user
-            startActivity(new Intent(LoginActivity.this, MainNavigation.class));
-            FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
-            // if teacher
-            //startActivity(new Intent(LoginActivity.this, TeacherNavigation.class)); // remember to import class
+            goToActivity(getSharedPreferences(USERDETAILSSHAREDPREF, 0).getString("userType", ""));
             finish();
         }
 
@@ -84,8 +75,6 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Button btnLogin = (Button) findViewById(R.id.btn_login);
         Button resetPassword = (Button) findViewById(R.id.btn_reset_password);
-
-        auth = FirebaseAuth.getInstance();
 
         btnLogin.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -122,8 +111,6 @@ public class LoginActivity extends AppCompatActivity {
                             // error in login
                             Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                         } else {
-                            // TODO: get the user type based on uid and open the activity accordingly
-
                             if (auth.getCurrentUser() != null) {
                                 uid = auth.getCurrentUser().getUid();
                             }
@@ -132,16 +119,6 @@ public class LoginActivity extends AppCompatActivity {
                             stringRequest.setTag(TAG);
 
                             requestQueue.add(stringRequest);
-
-                            // TODO: make necessary changes based on type of user
-                            // if student
-                            Intent intent = new Intent(LoginActivity.this, MainNavigation.class);
-                            // if teacher
-                            // Intent intent = new Intent(LoginActivity.this, TeacherNavigation.class); // remember to import class
-                            FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
-                            progressBar.setVisibility(View.GONE);
-                            startActivity(intent);
-                            finish();
                         }
                     }
                 });
@@ -166,10 +143,10 @@ public class LoginActivity extends AppCompatActivity {
 
     StringRequest makeRequest() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SEND_URL, new Response.Listener<String>() {
+        String SEND_URL = "http://ostminiproject.000webhostapp.com/getUserType.php";
+        return new StringRequest(Request.Method.POST, SEND_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(LoginActivity.this, response, Toast.LENGTH_LONG).show();
 
                 try {
                     JSONObject jsonRootObject = new JSONObject(response);
@@ -182,6 +159,12 @@ public class LoginActivity extends AppCompatActivity {
                     userType[0] =jsonObject.optString("user_type");
 
                     Toast.makeText(LoginActivity.this,fname[0]+"\nUser Type: "+userType[0], Toast.LENGTH_LONG).show();
+
+                    if (saveUserDetailsSharedPref()) {
+                        goToActivity(userType[0]);
+                    }
+                    progressBar.setVisibility(View.GONE);
+                    finish();
                 } catch (Exception e) {
                     Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -190,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("Volley Error","error fetching details via volley");
                     }
                 }) {
             @Override
@@ -200,7 +183,28 @@ public class LoginActivity extends AppCompatActivity {
                 return params;
             }
         };
+    }
 
-        return stringRequest;
+    boolean saveUserDetailsSharedPref() {
+        userDetails = getSharedPreferences(USERDETAILSSHAREDPREF, 0);
+        SharedPreferences.Editor editor = userDetails.edit();
+        editor.putString("firebaseUid", fireBaseUid[0]);
+        editor.putString("enrollmentNo", enrollmentNo[0]);
+        editor.putString("userType", userType[0]);
+        editor.putString("fname", fname[0]);
+        editor.putString("lname", lname[0]);
+        return editor.commit();
+    }
+
+    void goToActivity(String userType) {
+        if (userType.equals("1")) {
+            startActivity(new Intent(LoginActivity.this, MainNavigation.class));
+            Config.TOPIC_GLOBAL = "student";
+            FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+        } else if (userType.equals("0")) {
+            startActivity(new Intent(LoginActivity.this, TeacherNavigation.class));
+            Config.TOPIC_GLOBAL = "teacher";
+            FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+        }
     }
 }

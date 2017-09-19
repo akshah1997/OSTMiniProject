@@ -1,6 +1,7 @@
 package com.akshay.ostminiproject.activities.student;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -27,6 +28,7 @@ public class MainNavigation extends AppCompatActivity
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
+    SharedPreferences userDeatils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +55,14 @@ public class MainNavigation extends AppCompatActivity
 
         auth.addAuthStateListener(authStateListener);
 
+        userDeatils = getSharedPreferences(LoginActivity.USERDETAILSSHAREDPREF, 0);
+        String enrollment = userDeatils.getString("enrollmentNo", null);
+        Toast.makeText(this, enrollment+" is your enroll no", Toast.LENGTH_SHORT).show();
+
         // check if this activity was created from notification
-        String message = getIntent().getStringExtra("message");
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        if (message != null) {
+        String notifMessage = getIntent().getStringExtra("message");
+        Toast.makeText(this, notifMessage, Toast.LENGTH_SHORT).show();
+        if (notifMessage != null) {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, Notification.newInstance()).commit();
         }
 
