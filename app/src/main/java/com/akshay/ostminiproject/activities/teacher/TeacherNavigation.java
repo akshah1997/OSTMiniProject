@@ -1,6 +1,7 @@
 package com.akshay.ostminiproject.activities.teacher;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -11,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.akshay.ostminiproject.R;
 import com.akshay.ostminiproject.activities.login.LoginActivity;
@@ -26,6 +29,7 @@ public class TeacherNavigation extends AppCompatActivity
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
+    SharedPreferences userDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,11 @@ public class TeacherNavigation extends AppCompatActivity
         setContentView(R.layout.activity_teacher_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.teacher_navigation_view);
+        View view = navigationView.getHeaderView(0);
+        TextView userName = (TextView) view.findViewById(R.id.teacher_nav_header_username);
+        TextView userEnrollemntNo = (TextView) view.findViewById(R.id.teacher_nav_header_enrollment);
 
         auth = FirebaseAuth.getInstance();
 
@@ -52,6 +61,13 @@ public class TeacherNavigation extends AppCompatActivity
 
         auth.addAuthStateListener(authStateListener);
 
+        userDetails = getSharedPreferences(LoginActivity.USERDETAILSSHAREDPREF, 0);
+        String user = (userDetails.getString("fname", null)) + " " + (userDetails.getString("lname", null));
+        String enrollment = userDetails.getString("enrollmentNo", null);
+
+        userName.setText(user);
+        userEnrollemntNo.setText(enrollment);
+
         // check if this activity was created from notification
         String message = getIntent().getStringExtra("message");
         if (message != null) {
@@ -64,7 +80,6 @@ public class TeacherNavigation extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 

@@ -12,7 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.TextView;
 
 import com.akshay.ostminiproject.R;
 import com.akshay.ostminiproject.activities.login.LoginActivity;
@@ -28,7 +29,7 @@ public class MainNavigation extends AppCompatActivity
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    SharedPreferences userDeatils;
+    SharedPreferences userDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,11 @@ public class MainNavigation extends AppCompatActivity
         setContentView(R.layout.activity_main_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.student_navigation_view);
+        View view = navigationView.getHeaderView(0);
+        TextView userName = (TextView) view.findViewById(R.id.student_nav_header_username);
+        TextView userEnrollemntNo = (TextView) view.findViewById(R.id.student_nav_header_enrollment);
 
         auth = FirebaseAuth.getInstance();
 
@@ -55,13 +61,16 @@ public class MainNavigation extends AppCompatActivity
 
         auth.addAuthStateListener(authStateListener);
 
-        userDeatils = getSharedPreferences(LoginActivity.USERDETAILSSHAREDPREF, 0);
-        String enrollment = userDeatils.getString("enrollmentNo", null);
-        Toast.makeText(this, enrollment+" is your enroll no", Toast.LENGTH_SHORT).show();
+        userDetails = getSharedPreferences(LoginActivity.USERDETAILSSHAREDPREF, 0);
+        String user = (userDetails.getString("fname", null)) + " " + (userDetails.getString("lname", null));
+        String enrollment = userDetails.getString("enrollmentNo", null);
+
+        userName.setText(user);
+        userEnrollemntNo.setText(enrollment);
 
         // check if this activity was created from notification
         String notifMessage = getIntent().getStringExtra("message");
-        Toast.makeText(this, notifMessage, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, notifMessage, Toast.LENGTH_SHORT).show();
         if (notifMessage != null) {
             getFragmentManager().beginTransaction().replace(R.id.fragment_container, Notification.newInstance()).commit();
         }
@@ -72,7 +81,6 @@ public class MainNavigation extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
