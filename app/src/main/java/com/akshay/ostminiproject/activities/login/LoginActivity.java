@@ -110,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(!task.isSuccessful()){
                             // error in login
                             Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
                         } else {
                             if (auth.getCurrentUser() != null) {
                                 uid = auth.getCurrentUser().getUid();
